@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\WebhookPayments.Domain</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebhookPayment.Infra\PaymentService.Infra.csproj" />
+    <ProjectReference Include="..\WebhookPayments.Application\PaymentService.Application.csproj" />
+    <ProjectReference Include="..\WebhookPayments.Domain\PaymentService.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
