@@ -19,6 +19,21 @@ public class MercadoPagoGatteway : IPaymentGateway
 		_client = client;
 	}
 
+	public async Task<string> CheckPaymentStatusAsync(string Id)
+	{
+		// 1. Fazemos um GET na rota oficial do Mercado Pago usando o ID fornecido
+		// Como o HttpClient já tem o seu Access Token no Header, ninguém consegue forjar essa chamada.
+		var response = await _client.GetAsync($"v1/payments/{Id}");
+
+		if (!response.IsSuccessStatusCode)
+			return "rejected";
+
+		var responseJson = await response.Content.ReadAsStringAsync();
+		var mercadoPagoResult = JsonSerializer.Deserialize<JsonElement>(responseJson);
+
+		return mercadoPagoResult.GetProperty("status").GetString()!;
+	}
+
 	public async Task<PixPaymentResponse> GenaratePixQrCodeAsync(decimal amount, string cpf, string description, string email, 
 	string AcessToken)
 	{
