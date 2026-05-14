@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace PaymentService.Application.Dtos;
 
-public record PixPaymentResponse (Guid id, string QrCode)
+public record PixPaymentResponse (string id, string QrCode)
 {
 }

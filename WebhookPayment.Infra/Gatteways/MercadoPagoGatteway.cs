@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PaymentService.Application.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -9,18 +10,16 @@ using WebhookPayments.Application.Interfaces;
 
 namespace WebhookPayment.Infra.Gatteways;
 
-public class MercadoPagoGatteway : IPaymentGatteway
+public class MercadoPagoGatteway : IPaymentGateway
 {
 	private readonly HttpClient _client;
-	private readonly string _acessToken;
 
 	public MercadoPagoGatteway(HttpClient client, string acessToken)
 	{
 		_client = client;
-		_acessToken = acessToken;
 	}
 
-	public async Task<string> GerarPixQrCode(decimal amount, string cpf, string description, string email, 
+	public async Task<PixPaymentResponse> GenaratePixQrCodeAsync(decimal amount, string cpf, string description, string email, 
 	string AcessToken)
 	{
 		_client.DefaultRequestHeaders.Authorization =
@@ -51,7 +50,10 @@ public class MercadoPagoGatteway : IPaymentGatteway
 		var responseJson = await response.Content.ReadAsStringAsync();
 		var mercadoPagoResult = JsonSerializer.Deserialize<JsonElement>(responseJson);
 
-		return mercadoPagoResult.GetProperty("point_of_interaction").GetProperty("transaction_data")
+		var externald = mercadoPagoResult.GetProperty("id").ToString();
+		var qrCode =  mercadoPagoResult.GetProperty("point_of_interaction").GetProperty("transaction_data")
 		.GetProperty("qr_code").GetString()!;
+
+		return new PixPaymentResponse(externald, qrCode);
 	}
 }

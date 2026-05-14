@@ -23,7 +23,7 @@ public static class DependencyInjection
 		services.AddScoped<IOrderRepository, OrderRepository>();
 		services.AddScoped<IWebhookRepository, WebhookRepository>();
 
-		services.AddHttpClient<IPaymentGatteway, MercadoPagoGatteway>(client =>
+		services.AddHttpClient<IPaymentGateway, MercadoPagoGatteway>(client =>
 		{
 			client.BaseAddress = new Uri(configuration["MercadoPago:BaseUrl"]);
 		});

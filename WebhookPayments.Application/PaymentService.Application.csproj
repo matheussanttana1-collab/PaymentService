@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Usecases\CreatePixPayment.cs" />
+    <None Include="Usecases\CreatePixPaymentUseCase.cs" />
   </ItemGroup>
 
   <ItemGroup>
