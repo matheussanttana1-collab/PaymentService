@@ -10,10 +10,11 @@ namespace WebhookPayments.Domain.Entities;
 
 public class WebhookEvent
 {
-	public WebhookEvent(string externalId, string gatewayName, string rawPayload)
+	public WebhookEvent(string externaEventlId,string externalPaymentId, string gatewayName, string rawPayload)
 	{
 		Id = Guid.NewGuid();
-		ExternalId = externalId;
+		ExternalEventId = externaEventlId;
+		ExternalPaymentId = externalPaymentId;
 		GatewayName = gatewayName;
 		RawPayload = rawPayload;
 		Status = WebhookStatus.Pending;
@@ -21,7 +22,8 @@ public class WebhookEvent
 	}
 
 	public Guid Id { get; private set; }
-	public string ExternalId { get; private set; }
+	public string ExternalEventId { get; private set; }
+	public string ExternalPaymentId { get; private set; }
 	public string GatewayName { get; private set; }
 	public string RawPayload { get; private set; }
 
@@ -38,7 +40,7 @@ public class WebhookEvent
 		ErrorMessage = null;
 	}
 
-	public void MarkAsFaild (string errorMessage)
+	public void MarkAsFailed (string errorMessage)
 	{
 		Status = WebhookStatus.Failed;
 		ErrorMessage = errorMessage;

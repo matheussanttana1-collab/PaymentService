@@ -2,14 +2,16 @@
 
 namespace PaymentService.Application.Dtos;
 
-public class WebhookDTO
+public class WebhookEventDto
 {
 
 	[JsonPropertyName("action")]
 	public string Action { get; set; }
 
 	[JsonPropertyName("data")]
-	public DataDto data { get; set; }
+	public DataDto Data { get; set; }
+	[JsonPropertyName("id")]
+	public long EventId { get; set; }
 }
 
 public class DataDto
