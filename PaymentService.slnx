@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/Itens de Solução/">
+    <File Path=".env" />
+    <File Path="docker-compose.yml" />
     <File Path="MapaMental.md" />
   </Folder>
   <Project Path="PaymentService.API/PaymentService.API.csproj" />

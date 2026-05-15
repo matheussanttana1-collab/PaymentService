@@ -1,0 +1,65 @@
+version: '3.8'
+
+# Declaramos a nossa rede explicitamente
+networks:
+  payment_network:
+    driver: bridge
+
+services:
+  # 1. Banco de Dados PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: payment_postgres
+    restart: always
+    networks:
+      - payment_network
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=paymentdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Mensageiro RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: payment_rabbitmq
+    restart: always
+    networks:
+      - payment_network
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RMQ_PASSWORD}
+    ports:
+      - "5672:5672"   
+      - "15672:15672" 
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+
+  # 3. A nossa API PaymentService
+  payment-api:
+    build:
+      context: .
+      dockerfile: PaymentService.API/Dockerfile 
+    container_name: payment_api
+    restart: on-failure
+    networks:
+      - payment_network
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=paymentdb;Username=${DB_USER};Password=${DB_PASSWORD}
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=${RMQ_USER}
+      - RabbitMQ__Password=${RMQ_PASSWORD}
+      - MercadoPago__AccessToken=${MP_ACCESS_TOKEN}
+    depends_on:
+      - postgres
+      - rabbitmq
+
+volumes:
+  postgres_data:
+  rabbitmq_data:

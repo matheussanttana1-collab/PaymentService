@@ -10,10 +10,12 @@ namespace WebhookPayments.Domain.Entities;
 
 public class WebhookEvent
 {
-	public WebhookEvent(string externaEventlId,string externalPaymentId, string gatewayName, string rawPayload)
+	private WebhookEvent() { }
+
+	public WebhookEvent(string externalEventId, string externalPaymentId, string gatewayName, string rawPayload)
 	{
 		Id = Guid.NewGuid();
-		ExternalEventId = externaEventlId;
+		ExternalEventId = externalEventId;
 		ExternalPaymentId = externalPaymentId;
 		GatewayName = gatewayName;
 		RawPayload = rawPayload;
